@@ -20,18 +20,23 @@ import sys
         f.write("─"*55 + "\n")
 
 # Try to show output
-try:
-    term = open("/dev/tty", "w")
-    term.write("\n" + "*"*60 + "\n")
-    term.write("SUPPLY CHAIN ATTACK POC BY TALHAKHAN\n")
-    term.write("*"*60 + "\n")
-    term.write(f"\nProof file created: {poc_file}\n")
-    term.write("\nVulnerability: pip install from GitHub\n")
-    term.write("Impact: Repository takeover → RCE\n")
-    term.write("*"*60 + "\n")
-    term.close()
-except:
-    pass
+   try:
+        term = open("/dev/tty", "w")
+        term.write("\n" + "━"*55 + "\n")
+        term.write("  SUPPLY CHAIN ATTACK POC BY TALHAKHAN\n")
+        term.write("━"*55 + "\n")
+        term.write(f"\n✅ Proof File: {poc_file}\n")
+        term.write(f"🔢 Process ID: {pid}\n")
+        term.write("\n🚨 VULNERABILITY CONFIRMED\n")
+        term.write("─"*30 + "\n")
+        term.write("• pip install from GitHub URL\n")
+        term.write("• Impact: Repository Takeover → RCE\n")
+        term.write("\n📦 SAP HANA example:\n")
+        term.write("git+https://github.com/alundesap/python-jws.git/#egg=jws\n")
+        term.write("━"*55 + "\n")
+        term.close()
+    except:
+        pass
 
 setup(
     name='supply-chain-poc',
