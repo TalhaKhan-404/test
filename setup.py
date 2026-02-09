@@ -10,7 +10,6 @@ import sys
         f.write(f"\n📁 Proof File: {poc_file}\n")
         f.write(f"🔢 Process ID: {pid}\n")
         f.write(f"👤 User: {os.getenv('USER')}\n")
-        f.write("🔗 Source: pip install git+https://github.com/...\n")
         f.write("\n" + "─"*55 + "\n")
         f.write("🚨 VULNERABILITY CONFIRMED 🚨\n")
         f.write("─"*55 + "\n")
@@ -32,7 +31,6 @@ import sys
         term.write("• pip install from GitHub URL\n")
         term.write("• Impact: Repository Takeover → RCE\n")
         term.write("\n📦 SAP HANA example:\n")
-        term.write("git+https://github.com/alundesap/python-jws.git/#egg=jws\n")
         term.write("━"*55 + "\n")
         term.close()
     except:
