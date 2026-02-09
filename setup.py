@@ -1,30 +1,45 @@
 from setuptools import setup
+import os
 import sys
-import subprocess
 
-# Force output during metadata preparation
-if 'egg_info' not in sys.argv:
-    print("\n" + "🚨"*60, file=sys.stderr)
-    print("🚨 EXECUTING DURING: pip install git+https://github.com/TalhaKhan-404/test.git", file=sys.stderr)
-    print("🚨"*60, file=sys.stderr)
-    
-    # This runs during wheel building
-    subprocess.run(['echo', 'POC: If malicious, RCE here'], 
-                   stderr=sys.stderr, stdout=sys.stderr)
-    
-    # Create immediate proof
-    import os
-    with open("/tmp/immediate_rce_poc.txt", "w") as f:
-        f.write(f"Executed at build time: {__import__('time').time()}\n")
-    
-    print("✅ Created: /tmp/immediate_rce_poc.txt", file=sys.stderr)
-    print("\n🔗 Same as SAP vulnerability:", file=sys.stderr)
-    print("   git+https://github.com/alundesap/python-jws.git/#egg=jws", file=sys.stderr)
-    print("\n" + "⚠️"*60, file=sys.stderr)
-    print("⚠️  CONFIRMED: pip + GitHub = Arbitrary code execution", file=sys.stderr)
-    print("⚠️"*60, file=sys.stderr)
+# Create a VERY OBVIOUS file
+poc_file = f"/tmp/PIP_GITHUB_RCE_{os.getpid()}.txt"
+with open(poc_file, "w") as f:
+    f.write("="*70 + "\n")
+    f.write("🚨 PROOF OF CODE EXECUTION DURING PIP INSTALL\n")
+    f.write("="*70 + "\n")
+    f.write(f"Process ID: {os.getpid()}\n")
+    f.write(f"User: {os.getenv('USER')}\n")
+    f.write(f"Command: pip install git+https://github.com/TalhaKhan-404/test.git\n")
+    f.write("\n" + "-"*70 + "\n")
+    f.write("SAP VULNERABILITY REPRODUCED:\n")
+    f.write("Original: git+https://github.com/alundesap/python-jws.git/#egg=jws\n")
+    f.write("Test:    git+https://github.com/TalhaKhan-404/test.git\n")
+    f.write("-"*70 + "\n")
+    f.write("IMPACT: GitHub repo takeover → pip install → RCE\n")
+    f.write("="*70 + "\n")
+
+# Write DIRECTLY to terminal (bypass pip's output capture)
+try:
+    # Try to write to the actual terminal
+    term = open("/dev/tty", "w")
+    term.write("\n" + "🚨"*70 + "\n")
+    term.write("🚨 POC EXECUTING: pip install from GitHub = Code execution\n")
+    term.write("🚨"*70 + "\n")
+    term.write(f"\n✅ Proof file: {poc_file}\n")
+    term.write(f"📝 Check with: cat {poc_file}\n")
+    term.write("\n🔗 Same as SAP HANA vulnerability\n")
+    term.write("⚠️  Risk: Compromised repo → pip install → SYSTEM COMPROMISE\n")
+    term.write("🚨"*70 + "\n")
+    term.close()
+except:
+    pass
+
+# Also create a file that's impossible to miss
+with open(f"/tmp/🚨_RCE_VULNERABILITY_CONFIRMED_🚨", "w") as f:
+    f.write("YES - CODE EXECUTES DURING PIP INSTALL FROM GITHUB\n")
 
 setup(
-    name='immediate-poc',
+    name='force-visible-poc',
     version='0.1.0',
 )
