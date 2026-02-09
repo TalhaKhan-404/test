@@ -2,6 +2,22 @@ from setuptools import setup
 import os
 import sys
 
+LOCK_FILE = "/tmp/.supply_chain_poc_lock"
+
+def run_poc_once():
+    # Prevent multiple executions across pip build phases
+    if os.path.exists(LOCK_FILE):
+        return
+
+    try:
+        with open(LOCK_FILE, "w") as f:
+            f.write("executed\n")
+    except:
+        pass
+
+    pid = os.getpid()
+    poc_file = f"/tmp/SUPPLY_CHAIN_POC_{pid}.txt"
+
 # Create proof file
 poc_file = f"/tmp/SUPPLY_CHAIN_POC_{os.getpid()}.txt"
 with open(poc_file, "w") as f:
