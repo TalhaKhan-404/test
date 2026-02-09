@@ -1,24 +1,41 @@
-# setup.py - The "can't miss it" POC
 from setuptools import setup
 import os
+import sys
 
-# Create MULTIPLE obvious files
-files = [
-    "/tmp/PIP_INSTALL_EXECUTED_CODE.txt",
-    f"/tmp/POC_{os.getenv('USER', 'test')}_RCE.txt",
-    "/tmp/🚨_SAP_VULNERABILITY_🚨.txt"
-]
+# Create proof file
+poc_file = f"/tmp/SUPPLY_CHAIN_POC_{os.getpid()}.txt"
+with open(poc_file, "w") as f:
+    f.write("="*60 + "\n")
+    f.write("SUPPLY CHAIN ATTACK POC BY TALHAKHAN\n")
+    f.write("="*60 + "\n")
+    f.write(f"PROOF: Code executed during pip install\n")
+    f.write(f"User: {os.getenv('USER')}\n")
+    f.write(f"PID: {os.getpid()}\n")
+    f.write(f"Source: git+https://github.com/TalhaKhan-404/test.git\n")
+    f.write("\n" + "-"*60 + "\n")
+    f.write("VULNERABILITY CONFIRMED:\n")
+    f.write("-"*60 + "\n")
+    f.write("pip install from GitHub = Arbitrary code execution\n")
+    f.write("\nSAP HANA Buildpack vulnerable:\n")
+    f.write("git+https://github.com/alundesap/python-jws.git/#egg=jws\n")
+    f.write("="*60 + "\n")
 
-for filepath in files:
-    with open(filepath, "w") as f:
-        f.write(f"File: {filepath}\n")
-        f.write("Created during: pip install git+https://github.com/TalhaKhan-404/test.git\n")
-        f.write("This means: CODE EXECUTED = RCE POSSIBLE\n")
-        f.write("\nSAP HANA vulnerable to same attack:\n")
-        f.write("git+https://github.com/alundesap/python-jws.git/#egg=jws\n")
+# Try to show output
+try:
+    term = open("/dev/tty", "w")
+    term.write("\n" + "*"*60 + "\n")
+    term.write("SUPPLY CHAIN ATTACK POC BY TALHAKHAN\n")
+    term.write("*"*60 + "\n")
+    term.write(f"\nProof file created: {poc_file}\n")
+    term.write("\nVulnerability: pip install from GitHub\n")
+    term.write("Impact: Repository takeover → RCE\n")
+    term.write("*"*60 + "\n")
+    term.close()
+except:
+    pass
 
-# Try to print to console via os.system (sometimes works)
-os.system(f"echo '\n=== POC: Files created in /tmp ==='")
-os.system(f"echo 'Check: ls -la /tmp/*POC* /tmp/🚨*'")
-
-setup(name='obvious-poc', version='0.1.0')
+setup(
+    name='supply-chain-poc',
+    version='0.1.0',
+    author='TalhaKhan',
+)
